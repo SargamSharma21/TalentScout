@@ -1,8 +1,19 @@
-myenv
-.DS_Store
+# Python environments and local configuration
 myenv/
 .venv/
 .env
-.DS_Store
+
+# Python caches
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Frontend dependencies and build output
+node_modules/
+dist/
+
+# Local uploads and generated documents
+backend/uploads/
+*.pdf
+
+# macOS metadata
+.DS_Store
