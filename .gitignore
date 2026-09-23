@@ -13,6 +13,7 @@ dist/
 
 # Local uploads and generated documents
 backend/uploads/
+backend/talentscout.db
 *.pdf
 
 # macOS metadata

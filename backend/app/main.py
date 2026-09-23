@@ -6,7 +6,7 @@ import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 from typing import List
-
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -20,18 +20,19 @@ client = AzureOpenAI(
 DEPLOYMENT_NAME = os.getenv("AZURE_DEPLOYMENT_NAME", "gpt-4.1-mini")
 
 from fastapi.middleware.cors import CORSMiddleware
+from .auth import router as auth_router
 
 app = FastAPI(title="RecruitAI Backend")
+app.include_router(auth_router)
 
 # Add CORS so your React frontend can talk to FastAPI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For local dev; lock down in production
+    allow_origins=["http://localhost:5173", "https://talentscout12.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Initialize OpenAI client pointing to Microsoft Foundry
 
 class ExperienceRequirement(BaseModel):
@@ -412,4 +413,5 @@ async def compare_candidates(
     
     parsed_comparison = comparison_comp.choices[0].message.parsed
     parsed_comparison.rankings.sort(key=lambda candidate: candidate.match_percentage, reverse=True)
+    # print(parsed_comparison)
     return parsed_comparison

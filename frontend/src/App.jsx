@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import { TOKEN_KEY, useAuth } from './AuthContext.jsx';
 
 const tierDefinitions = [
   { key: 'high', label: 'High Matches', description: 'Strong alignment with the target role', color: 'red' },
@@ -31,6 +32,7 @@ function formatFileSize(bytes) {
 }
 
 function App() {
+  const { user, logout } = useAuth();
   const [jdFile, setJdFile] = useState(null);
   const [resumeFiles, setResumeFiles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -91,9 +93,10 @@ function App() {
     setComparisonResult(null);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/v1/recruitment/compare-candidates", formData, {
+      const response = await axios.post("http://127.0.0.1:8001/api/v1/recruitment/compare-candidates", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
         },
       });
       setComparisonResult(response.data);
@@ -148,7 +151,7 @@ function App() {
       <main className="dashboard">
         <header className="topbar">
           <a className="brand" href="/" aria-label="TalentScout home"><span className="brand-mark">TS</span><span>TalentScout</span></a>
-          <span className="status-label"><span className="status-dot" /> Evidence engine online</span>
+          <div className="header-actions"><span className="status-label"><span className="status-dot" /> Evidence engine online</span><div className="profile-menu"><span className="profile-badge" title={user?.email}>{user?.full_name}</span><button type="button" onClick={logout}>Logout</button></div></div>
         </header>
 
         <section className="intro">
