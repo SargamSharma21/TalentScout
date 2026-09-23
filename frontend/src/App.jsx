@@ -93,7 +93,7 @@ function App() {
     setComparisonResult(null);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8001/api/v1/recruitment/compare-candidates", formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/recruitment/compare-candidates`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
